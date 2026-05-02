@@ -7,7 +7,6 @@ def create_heatmap_dataset(df):
         "appid",
         "name",
         "release_date",
-        "genres",
         "tags"
     ]
 
@@ -21,17 +20,35 @@ def create_heatmap_dataset(df):
 
     return heatmap_df
 
-def split_genres(df):
+def create_heatmap_matrix(df):
+    heatmap_matrix = df.pivot(
+        index="release_year",
+        columns="tags",
+        values="game_count"
+    )
+
+    heatmap_matrix = heatmap_matrix.fillna(0)
+    return heatmap_matrix
+
+
+def split_tags(df):
     df = df.copy()
     
-    df["genre_list"] = df["genres"].apply(ast.literal_eval) 
+    df["tag_dict"] = df["tags"].apply(ast.literal_eval) 
 
-    exploded_df = df.explode("genre_list")
+    exploded_df = df.explode("tag_dict")
 
     exploded_df = exploded_df.rename(columns={
-        "genre_list": "genre"
+        "tag_dict": "tag"
     })
 
-    exploded_df = exploded_df.dropna(subset="genre")
+    exploded_df = exploded_df.dropna(subset=["tag"])
 
     return exploded_df
+
+def count_games(df):
+    genre_counts = (
+        df.groupby(["release_year", "tag"]).size().reset_index(name="game_count")
+    )
+
+    return genre_counts
