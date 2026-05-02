@@ -23,7 +23,7 @@ def create_heatmap_dataset(df):
 def create_heatmap_matrix(df):
     heatmap_matrix = df.pivot(
         index="release_year",
-        columns="tags",
+        columns="tag",
         values="game_count"
     )
 
@@ -33,7 +33,7 @@ def create_heatmap_matrix(df):
 
 def split_tags(df):
     df = df.copy()
-    
+
     df["tag_dict"] = df["tags"].apply(ast.literal_eval) 
 
     exploded_df = df.explode("tag_dict")
@@ -52,3 +52,17 @@ def count_games(df):
     )
 
     return genre_counts
+
+def filter_top_tags(heatmap_matrix, top_n=30):
+    tag_totals = heatmap_matrix.sum(axis=0)
+
+    top_tags = (
+        tag_totals
+        .sort_values(ascending=False)
+        .head(top_n)
+        .index
+    )
+
+    filtered_matrix = heatmap_matrix[top_tags]
+
+    return filtered_matrix
