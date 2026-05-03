@@ -67,3 +67,10 @@ def filter_top_tags(heatmap_matrix, top_n=30):
 
     return filtered_matrix
 
+def create_percentage_matrix(heatmap_matrix, df):
+    games_per_year = (df.groupby("release_year")["appid"].nunique())
+
+    percentage_matrix = heatmap_matrix.div(games_per_year, axis=0) * 100
+    percentage_matrix = percentage_matrix.fillna(0)
+
+    return percentage_matrix
