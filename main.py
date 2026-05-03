@@ -1,6 +1,8 @@
 from load_dataset import load_steam_dataset
-from heatmap_data import create_heatmap_dataset, split_tags, count_games, create_heatmap_matrix, filter_top_tags, create_scatter_dataset, filter_top_tags_scatter
-from heatmap_visalisation import create_genre_heatmap, create_scatter
+from heatmap_data import create_heatmap_dataset, split_tags, count_games, create_heatmap_matrix, filter_top_tags 
+from scatter_data import create_scatter_dataset, filter_top_tags_scatter
+from heatmap_visalisation import create_genre_heatmap 
+from scatter_visualisation import create_scatter
 
 def main():
 
