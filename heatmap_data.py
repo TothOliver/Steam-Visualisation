@@ -1,6 +1,30 @@
 import pandas as pd
 import ast
 
+def prepare_heatmap_data(df, top_n=30):
+    heatmap_df = create_heatmap_dataset(df)
+    exploded_df = split_tags(heatmap_df)
+
+    tag_counts = count_games(exploded_df)
+    full_heatmap_matrix = create_heatmap_matrix(tag_counts)
+    full_percentage_matrix = create_percentage_matrix(full_heatmap_matrix, heatmap_df)
+
+    tag_totals = full_heatmap_matrix.sum(axis=0).sort_values(ascending=False)
+    all_tags_sorted = tag_totals.index.tolist()
+
+    default_tags = all_tags_sorted[:top_n]
+    default_heatmap_matrix = full_heatmap_matrix[default_tags]
+    default_percentage_matrix = full_percentage_matrix[default_tags]
+
+    return {
+        "full_heatmap_matrix": full_heatmap_matrix,
+        "full_percentage_matrix": full_percentage_matrix,
+        "default_heatmap_matrix": default_heatmap_matrix,
+        "default_percentage_matrix": default_percentage_matrix,
+        "all_tags_sorted": all_tags_sorted,
+        "default_tags": default_tags
+    }
+
 def create_heatmap_dataset(df):
     #no missing values for these
     heatmap_columns = [
