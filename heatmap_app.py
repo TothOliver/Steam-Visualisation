@@ -16,20 +16,60 @@ def create_app():
 
     app.layout = html.Div(
         children=[
-            html.H1("Stream Tag Trends"),
-            html.Label("Select Steam tags:"),
-            dcc.Dropdown(
-                id="tag-selector",
-                options=[
-                    {"label": tag, "value": tag}
-                    for tag in heatmap_data["all_tags_sorted"]
+            html.H1("Steam Tag Trends", style={"textAlign": "center"}),
+
+            html.Div(
+                children=[
+                    #heatmap
+                    html.Div(
+                        children=[
+                            dcc.Graph(
+                                id="tag-heatmap",
+                                style={
+                                    "height": "850px"
+                                }
+                            )
+                        ],
+                        style={
+                            "width": "55%",
+                            "display": "inline-block",
+                            "verticalAlign": "top",
+                            "paddingRight": "100px"
+                        }
+                    ),
+
+                    #dropdown
+                    html.Div(
+                        children=[
+                            html.H3("Tag Selection"),
+                            html.Label("Select Steam tags:"),
+                            dcc.Dropdown(
+                                id="tag-selector",
+                                options=[
+                                    {"label": tag, "value": tag}
+                                    for tag in heatmap_data["all_tags_sorted"]
+                                ],
+                                value=heatmap_data["default_tags"],
+                                multi=True,
+                                placeholder="Select tags to display...",
+                                optionHeight=35,
+                                maxHeight=500,
+                                style={"width": "100%"}
+                            )
+                        ],
+                        style={
+                            "width": "30%",
+                            "display": "inline-block",
+                            "verticalAlign": "top",
+                            "paddingLeft": "100px",
+                            "paddingRight": "10px"
+                        }
+                    )
                 ],
-                value=heatmap_data["default_tags"],
-                multi=True,
-                placeholder="Select tags to display..."
-            ),
-            dcc.Graph(id="tag-heatmap")
-        ]
+                style={"width": "100%"}
+            )
+        ],
+        style={"padding": "20px"}
     )
 
     @app.callback(
@@ -62,4 +102,4 @@ def create_app():
 if __name__ == "__main__":
     app = create_app()
     Timer(1, lambda: webbrowser.open("http://127.0.0.1:8050/")).start()
-    app.run(debug=True)
+    app.run(debug=False)

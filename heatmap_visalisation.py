@@ -1,6 +1,4 @@
 import plotly.express as px
-import ipywidgets as widgets
-from IPython.display import display
 
 def create_tag_heatmap(heatmap_matrix, percentage_matrix):
     heatmap_matrix = heatmap_matrix.T
