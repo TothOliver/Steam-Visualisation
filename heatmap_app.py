@@ -17,7 +17,6 @@ def create_app():
     app.layout = html.Div(
         children=[
             html.H1("Steam Tag Trends", style={"textAlign": "center"}),
-
             html.Div(
                 children=[
                     #heatmap
