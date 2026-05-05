@@ -1,4 +1,5 @@
 import pandas as pd
+import ast
 
 def create_scatter_dataset(df):
     scatter_columns = [
@@ -24,6 +25,21 @@ def create_scatter_dataset(df):
 
     return scatter_df
 
+def split_tags(df):
+    df = df.copy()
+
+    df["tag_dict"] = df["tags"].apply(ast.literal_eval) 
+
+    exploded_df = df.explode("tag_dict")
+
+    exploded_df = exploded_df.rename(columns={
+        "tag_dict": "tag"
+    })
+
+    exploded_df = exploded_df.dropna(subset=["tag"])
+
+    return exploded_df
+
 def count_tags(df):
     return (
         df.groupby("tag")
@@ -44,3 +60,17 @@ def filter_top_tags_scatter(df, top_n=30):
     filtered_df = df[df["tag"].isin(top_tags)]
 
     return filtered_df
+
+def prepare_scatter_data(df, top_n=10):
+    scatter_df = create_scatter_dataset(df)
+    scatter_df = split_tags(scatter_df)
+
+    tag_counts = scatter_df["tag"].value_counts()
+    tags_by_frequency = tag_counts.index.tolist()
+
+    return {
+        "df": scatter_df,
+        "tags_by_frequency": tags_by_frequency,
+        "default_tags": tags_by_frequency[:top_n],
+        "all_tags_sorted": sorted(tags_by_frequency)
+    }

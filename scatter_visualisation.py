@@ -2,7 +2,9 @@ import plotly.express as px
 import ipywidgets as widgets
 from IPython.display import display
 
-def create_scatter(filtered_df):
+def create_scatter(df, selected_tags):
+
+    filtered_df = df[df["tag"].isin(selected_tags)]
 
     if filtered_df.empty:
         return px.scatter(title="No data for selected tags")
