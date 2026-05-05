@@ -10,7 +10,7 @@ def create_app():
     file_path = "Dataset/games_march2025_cleaned.csv"
     df = load_steam_dataset(file_path)
     
-    heatmap_data = prepare_heatmap_data(df, top_n=10)
+    heatmap_data = prepare_heatmap_data(df, top_n=10, min_year=2010)
     
     app = Dash(__name__)
 

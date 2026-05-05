@@ -1,8 +1,8 @@
 import pandas as pd
 import ast
 
-def prepare_heatmap_data(df, top_n=10):
-    heatmap_df = create_heatmap_dataset(df)
+def prepare_heatmap_data(df, top_n=10, min_year=2010):
+    heatmap_df = create_heatmap_dataset(df, min_year)
     exploded_df = split_tags(heatmap_df)
 
     tag_counts = count_games(exploded_df)
@@ -28,7 +28,7 @@ def prepare_heatmap_data(df, top_n=10):
         "all_tags_sorted": all_tags_sorted
     }
 
-def create_heatmap_dataset(df):
+def create_heatmap_dataset(df, min_year):
     #no missing values for these
     heatmap_columns = [
         "appid",
@@ -44,6 +44,9 @@ def create_heatmap_dataset(df):
         errors="coerce"
     )
     heatmap_df["release_year"] = heatmap_df["release_date"].dt.year
+
+    heatmap_df = heatmap_df.dropna(subset=["release_date"])
+    heatmap_df = heatmap_df[heatmap_df["release_year"] >= min_year]
 
     return heatmap_df
 

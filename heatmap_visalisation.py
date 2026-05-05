@@ -13,7 +13,7 @@ def create_tag_heatmap(heatmap_matrix, percentage_matrix):
         },
         title="Steam Game Releases by Tag and Year",
         aspect="auto",
-        color_continuous_scale="Viridis" #Plasma, Cividis, Blues, YlOrRd, Turbo
+        color_continuous_scale="YlOrRd" #Viridis, Cividis YlOrRd
     )
 
     fig.update_layout(
