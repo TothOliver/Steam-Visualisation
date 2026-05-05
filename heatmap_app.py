@@ -41,7 +41,6 @@ def create_app():
                     html.Div(
                         children=[
                             html.H3("Tag Selection"),
-                            html.Label("Select Steam tags:"),
                             html.Div(
                                 children=[
                                     html.Button("Top 10", id="top-10-button", n_clicks=0, style={"flex": "1"}),

@@ -28,7 +28,7 @@ def create_tag_heatmap(heatmap_matrix, percentage_matrix):
         yaxis_title="Steam Tag",
         margin=dict(l=120, r=180, t=80, b=80),
         coloraxis_colorbar=dict(
-            title="Games",
+            title="Games(%)",
             x=-0.05,
             xanchor="right"
         )
@@ -39,7 +39,7 @@ def create_tag_heatmap(heatmap_matrix, percentage_matrix):
         hovertemplate=(
             "Release Year: %{x}<br>"
             "Steam Tag: %{y}<br>"
-            "Share of yearly releases: %{z:.2f}<br>%"
+            "Share of yearly releases: %{z:.2f}%<br>"
             "Number of Games: %{customdata:.0f}"
             "<extra></extra>"
         )
