@@ -10,8 +10,8 @@ def prepare_heatmap_data(df, top_n=30):
     full_percentage_matrix = create_percentage_matrix(full_heatmap_matrix, heatmap_df)
 
     tag_totals = full_heatmap_matrix.sum(axis=0).sort_values(ascending=False)
+    tags_by_frequency = tag_totals.index.tolist()
     default_tags = tag_totals.head(top_n).index.tolist()
-
     all_tags_sorted = sorted(full_heatmap_matrix.columns.tolist())
 
 
@@ -23,8 +23,9 @@ def prepare_heatmap_data(df, top_n=30):
         "full_percentage_matrix": full_percentage_matrix,
         "default_heatmap_matrix": default_heatmap_matrix,
         "default_percentage_matrix": default_percentage_matrix,
-        "all_tags_sorted": all_tags_sorted,
-        "default_tags": default_tags
+        "tags_by_frequency": tags_by_frequency,
+        "default_tags": default_tags,
+        "all_tags_sorted": all_tags_sorted
     }
 
 def create_heatmap_dataset(df):

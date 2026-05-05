@@ -1,6 +1,6 @@
 import webbrowser
 from threading import Timer
-from dash import Dash, dcc, html, Input, Output
+from dash import Dash, dcc, html, Input, Output, ctx
 
 from load_dataset import load_steam_dataset
 from heatmap_data import prepare_heatmap_data
@@ -42,6 +42,21 @@ def create_app():
                         children=[
                             html.H3("Tag Selection"),
                             html.Label("Select Steam tags:"),
+                            html.Div(
+                                children=[
+                                    html.Button("Top 10", id="top-10-button", n_clicks=0, style={"flex": "1"}),
+                                    html.Button("Top 20", id="top-20-button", n_clicks=0, style={"flex": "1"}),
+                                    html.Button("Top 30", id="top-30-button", n_clicks=0, style={"flex": "1"}),
+                                    html.Button("Top 40", id="top-40-button", n_clicks=0, style={"flex": "1"}),
+                                ],
+                                style={
+                                    "display": "flex",
+                                    "gap": "6px",
+                                    "width": "100%",
+                                    "marginBottom": "12px"
+                                }
+                            ),
+
                             dcc.Dropdown(
                                 id="tag-selector",
                                 options=[
@@ -73,9 +88,8 @@ def create_app():
 
     @app.callback(
         Output("tag-heatmap", "figure"),
-        Input("tag-selector", "value")
+        Input("tag-selector", "value"),
     )
-
     def update_heatmap(selected_tags):
         if not selected_tags:
             selected_tags = heatmap_data["default_tags"]
@@ -95,6 +109,32 @@ def create_app():
 
         return fig
     
+    @app.callback(
+        Output("tag-selector", "value"),
+        Input("top-10-button", "n_clicks"),
+        Input("top-20-button", "n_clicks"),
+        Input("top-30-button", "n_clicks"),
+        Input("top-40-button", "n_clicks"),
+        prevent_initial_call=True
+    )
+    def update_tag_selection(top_10, top_20, top_30, top_40):
+        clicked_button = ctx.triggered_id
+        print("Clicked button", clicked_button)
+
+        if clicked_button == "top-10-button":
+            return heatmap_data["tags_by_frequency"][:10]
+        
+        if clicked_button == "top-20-button":
+            return heatmap_data["tags_by_frequency"][:20]
+        
+        if clicked_button == "top-30-button":
+            return heatmap_data["tags_by_frequency"][:30]
+        
+        if clicked_button == "top-40-button":
+            return heatmap_data["tags_by_frequency"][:40]
+
+        return heatmap_data["default_tags"]
+
     return app
 
 

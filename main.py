@@ -1,5 +1,5 @@
 from load_dataset import load_steam_dataset
-from heatmap_data import create_heatmap_dataset, split_tags, prepare_heatmap_data
+from heatmap_data import split_tags, prepare_heatmap_data
 from scatter_data import create_scatter_dataset, filter_top_tags_scatter
 from heatmap_visalisation import create_tag_heatmap 
 from scatter_visualisation import create_scatter
