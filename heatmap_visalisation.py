@@ -1,11 +1,11 @@
 import plotly.express as px
 
 def create_tag_heatmap(heatmap_matrix, percentage_matrix):
-    heatmap_matrix = heatmap_matrix.T
-    percentage_matrix = percentage_matrix.T
+    percentage_plot_matrix = percentage_matrix.T
+    count_plot_matrix = heatmap_matrix.T
 
     fig = px.imshow(
-        heatmap_matrix,
+        percentage_plot_matrix,
         labels={
             "x": "Release Years",
             "y": "Steam Tag",
@@ -35,12 +35,12 @@ def create_tag_heatmap(heatmap_matrix, percentage_matrix):
     )
 
     fig.update_traces(
-        customdata=percentage_matrix.values,
+        customdata=count_plot_matrix.values,
         hovertemplate=(
             "Release Year: %{x}<br>"
             "Steam Tag: %{y}<br>"
-            "Number of Games: %{z:.0f}<br>"
-            "Share of yearly releases: %{customdata:.2f}%"
+            "Share of yearly releases: %{z:.2f}<br>%"
+            "Number of Games: %{customdata:.0f}"
             "<extra></extra>"
         )
     )
