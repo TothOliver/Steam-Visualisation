@@ -1,7 +1,7 @@
 import pandas as pd
 import ast
 
-def prepare_heatmap_data(df, top_n=30):
+def prepare_heatmap_data(df, top_n=10):
     heatmap_df = create_heatmap_dataset(df)
     exploded_df = split_tags(heatmap_df)
 

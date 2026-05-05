@@ -11,7 +11,7 @@ def main():
     df = load_steam_dataset(file_path)
 
     #Heatmap
-    heatmap_data = prepare_heatmap_data(df, top_n=30)
+    heatmap_data = prepare_heatmap_data(df, top_n=10)
 
     fig1 = create_tag_heatmap(
         heatmap_data["default_heatmap_matrix"], 
