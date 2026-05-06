@@ -1,20 +1,25 @@
 import plotly.express as px
 
-def create_tag_heatmap(heatmap_matrix, percentage_matrix):
+def create_tag_heatmap(heatmap_matrix, percentage_matrix, fixed_color_scale=False):
     percentage_plot_matrix = percentage_matrix.T
     count_plot_matrix = heatmap_matrix.T
 
-    fig = px.imshow(
-        percentage_plot_matrix,
-        labels={
+    imshow_settings = {
+        "img": percentage_plot_matrix,
+        "labels": {
             "x": "Release Years",
             "y": "Steam Tag",
-            "color": "Number of Games"
+            "color": "Share of Yearly Releases (%)"
         },
-        title="Steam Game Releases by Tag and Year",
-        aspect="auto",
-        color_continuous_scale="YlOrRd" #Viridis, Cividis YlOrRd
-    )
+        "title": "Steam Game Releases by Tag and Year",
+        "aspect": "auto",
+        "color_continuous_scale": "YlOrRd" #Viridis, Cividis YlOrRd
+    }
+
+    if fixed_color_scale:
+        imshow_settings["range_color"] = [0, 100]
+
+    fig = px.imshow(**imshow_settings)
 
     fig.update_layout(
         width=1200, 
@@ -28,9 +33,15 @@ def create_tag_heatmap(heatmap_matrix, percentage_matrix):
         yaxis_title="Steam Tag",
         margin=dict(l=120, r=180, t=80, b=80),
         coloraxis_colorbar=dict(
-            title="Games(%)",
-            x=-0.05,
-            xanchor="right"
+            title=dict(
+                text="Games <br>Share <br>(%)",
+                side="top",
+                font=dict(
+                    size=13
+                )
+            ),
+            x=-0.1,
+            xanchor="right",
         )
     )
 

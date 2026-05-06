@@ -40,6 +40,27 @@ def create_app():
                     #dropdown
                     html.Div(
                         children=[
+                            html.H3("Color scale:"),
+                            dcc.RadioItems(
+                                id="color-scale-mode",
+                                options=[
+                                    {"label": "Contextual", "value": "contextual"},
+                                    {"label": "0-100%", "value": "fixed"}
+                                ],
+                                value="contextual",
+                                inline=True,
+                                labelStyle={
+                                    "display": "inline-block",
+                                    "marginBottom": "2px",
+                                    "marginTop": "2px"
+                                },
+                                style={
+                                    "marginBottom": "12px"
+                                },
+                                inputStyle={
+                                    "marginRight": "4px"
+                                }
+                            ),
                             html.H3("Tag Selection"),
                             html.Div(
                                 children=[
@@ -88,8 +109,9 @@ def create_app():
     @app.callback(
         Output("tag-heatmap", "figure"),
         Input("tag-selector", "value"),
+        Input("color-scale-mode", "value")
     )
-    def update_heatmap(selected_tags):
+    def update_heatmap(selected_tags, color_scale_mode):
         if not selected_tags:
             selected_tags = heatmap_data["default_tags"]
 
@@ -103,7 +125,8 @@ def create_app():
 
         fig = create_tag_heatmap(
             filtered_heatmap_matrix,
-            filtered_percentage_matrix
+            filtered_percentage_matrix,
+            fixed_color_scale=(color_scale_mode == "fixed")
         )
 
         return fig
