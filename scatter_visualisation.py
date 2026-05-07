@@ -4,7 +4,12 @@ from IPython.display import display
 
 def create_scatter(df, selected_tags):
 
-    filtered_df = df[df["tag"].isin(selected_tags)]
+    filtered_df = df[
+    df["tags"].apply(
+        lambda game_tags:
+        all(tag in game_tags for tag in selected_tags)
+    )
+    ]
 
     if filtered_df.empty:
         return px.scatter(title="No data for selected tags")
@@ -13,7 +18,6 @@ def create_scatter(df, selected_tags):
         filtered_df,
         x="price",
         y="popularity",
-        color="tag",
         hover_data=["name"],
         title="Price vs Popularity (Top Tags)",
         opacity=0.6

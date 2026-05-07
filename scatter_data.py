@@ -14,31 +14,15 @@ def create_scatter_dataset(df):
 
     scatter_df["price"] = pd.to_numeric(scatter_df["price"], errors="coerce")
 
-    scatter_df["popularity"] = (
-        scatter_df["num_reviews_total"] 
-    )
+    scatter_df["popularity"] = scatter_df["num_reviews_total"]
+    scatter_df["tags"] = scatter_df["tags"].apply(ast.literal_eval)
 
     scatter_df = scatter_df[
-    (scatter_df["price"] > 0) &
-    (scatter_df["popularity"] > 10)
+    (scatter_df["price"] >= 0) &
+    (scatter_df["popularity"] > 100)
     ]
 
     return scatter_df
-
-def split_tags(df):
-    df = df.copy()
-
-    df["tag_dict"] = df["tags"].apply(ast.literal_eval) 
-
-    exploded_df = df.explode("tag_dict")
-
-    exploded_df = exploded_df.rename(columns={
-        "tag_dict": "tag"
-    })
-
-    exploded_df = exploded_df.dropna(subset=["tag"])
-
-    return exploded_df
 
 def count_tags(df):
     return (
@@ -62,10 +46,17 @@ def filter_top_tags_scatter(df, top_n=30):
     return filtered_df
 
 def prepare_scatter_data(df, top_n=10):
-    scatter_df = create_scatter_dataset(df)
-    scatter_df = split_tags(scatter_df)
 
-    tag_counts = scatter_df["tag"].value_counts()
+    scatter_df = create_scatter_dataset(df)
+
+    all_tags = [
+        tag
+        for tags in scatter_df["tags"]
+        for tag in tags
+    ]
+
+    tag_counts = pd.Series(all_tags).value_counts()
+
     tags_by_frequency = tag_counts.index.tolist()
 
     return {

@@ -10,7 +10,7 @@ def create_app():
     file_path = "Dataset/games_march2025_cleaned.csv"
     df = load_steam_dataset(file_path)
 
-    scatter_data = prepare_scatter_data(df, top_n=10)
+    scatter_data = prepare_scatter_data(df, top_n=1)
 
     app = Dash(__name__)
     
@@ -42,20 +42,6 @@ def create_app():
                         children=[
                             html.H3("Tag Selection"),
                             html.Label("Select Steam tags:"),
-                            html.Div(
-                                children=[
-                                    html.Button("Top 10", id="top-10-button", n_clicks=0, style={"flex": "1"}),
-                                    html.Button("Top 20", id="top-20-button", n_clicks=0, style={"flex": "1"}),
-                                    html.Button("Top 30", id="top-30-button", n_clicks=0, style={"flex": "1"}),
-                                    html.Button("Top 40", id="top-40-button", n_clicks=0, style={"flex": "1"}),
-                                ],
-                                style={
-                                    "display": "flex",
-                                    "gap": "6px",
-                                    "width": "100%",
-                                    "marginBottom": "12px"
-                                }
-                            ),
 
                             dcc.Dropdown(
                                 id="tag-selector",
@@ -101,32 +87,6 @@ def create_app():
         )
 
         return fig
-    
-    @app.callback(
-    Output("tag-selector", "value"),
-    Input("top-10-button", "n_clicks"),
-    Input("top-20-button", "n_clicks"),
-    Input("top-30-button", "n_clicks"),
-    Input("top-40-button", "n_clicks"),
-    prevent_initial_call=True
-    )
-    def update_tag_selection(top10, top20, top30, top40):
-
-        clicked = ctx.triggered_id
-
-        if clicked == "top-10-button":
-            return scatter_data["tags_by_frequency"][:10]
-
-        if clicked == "top-20-button":
-            return scatter_data["tags_by_frequency"][:20]
-
-        if clicked == "top-30-button":
-            return scatter_data["tags_by_frequency"][:30]
-
-        if clicked == "top-40-button":
-            return scatter_data["tags_by_frequency"][:40]
-
-        return scatter_data["default_tags"]
     return app
 
 if __name__ == "__main__":
