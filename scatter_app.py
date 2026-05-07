@@ -55,6 +55,26 @@ def create_app():
                                 optionHeight=35,
                                 maxHeight=500,
                                 style={"width": "100%"}
+                            ),
+                            html.Br(),
+                            html.Label("Price Range"),
+                            dcc.RangeSlider(
+                                id="price-slider",
+                                min=0,
+                                max=100,
+                                step=1,
+                                value=[0, 100],
+
+                                marks={
+                                    0: "0",
+                                    20: "20",
+                                    40: "40",
+                                    60: "60",
+                                    80: "80",
+                                    100: "100"
+                                },
+
+                                tooltip={"placement": "bottom"}
                             )
                         ],
                         style={
@@ -75,15 +95,17 @@ def create_app():
     @app.callback(
     Output("scatter-plot", "figure"),
     Input("tag-selector", "value"),
+    Input("price-slider", "value"),
     )
-    def update_scatter(selected_tags):
+    def update_scatter(selected_tags, price_range):
 
         if not selected_tags:
             selected_tags = scatter_data["default_tags"]
 
         fig = create_scatter(
             scatter_data["df"],
-            selected_tags
+            selected_tags,
+            price_range
         )
 
         return fig
